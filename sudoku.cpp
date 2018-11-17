@@ -1,4 +1,5 @@
 #include "sudoku.h"
+#include <cmath>
 
 using namespace std;
 
@@ -6,11 +7,16 @@ board::board(int sqSize)
     : value(BoardSize + 1, BoardSize + 1),
       original(BoardSize + 1, BoardSize + 1),
       rows(BoardSize + 1, BoardSize + 1), columns(BoardSize + 1, BoardSize + 1),
-      squares(BoardSize + 1, BoardSize + 1), possible(BoardSize + 1, BoardSize + 1, BoardSize + 1)
+      squares(BoardSize + 1, BoardSize + 1), possible(BoardSize + 1, BoardSize + 1), recurseCount(0)
 // Board constructor
 {
   clear();
     conflictflag = true;
+    for(int i = 1; i <= BoardSize; i++)
+      for(int j = 1; j <= BoardSize; j++)
+      {
+        possible[i][j].resize(BoardSize + 1);
+      }
 }
 
 void board::clear()
@@ -115,7 +121,7 @@ void board::print()
   cout << endl;
 }
 
-//--------------------------------------------------------//
+//-------------------------Part a-------------------------------//
 
 
 void board::printOriginal()
@@ -238,10 +244,27 @@ void board::printConflicts()
         cout << "No conflicts\n";
 }
 
+bool board::isFull()
+{
+  bool full = true;
+
+  for(int i = 1; i <= BoardSize; i++)
+    for(int j = 1; j <= BoardSize; j++)
+    {
+      if(value[i][j] == -1)
+        full = false;
+    }
+    return full;
+}
+
 bool board::isSolved()
 {
   conflicts();
-  return conflictflag;
+
+  if(conflictflag == true && isFull() == true)
+    return true;
+  else
+    return false;
 }
 
 void board::clearUpdate(int i, int j)
@@ -260,28 +283,168 @@ void board::addUpdate(int i, int j, int val)
   conflicts();
 }
 
-//--------------------------------------------------------------------------------------//
+//------------------------------------Part b----------------------------------------------//
 
-void board::updatePossible();
+void board::updatePossible()
 {
-    for(int 1 = 1; i <= BoardSize; i++)
-      for(int j = 1; j <= BoardSize; j++)
-        for(int k =  1; k <= BoardSize; k++)
+  conflicts();
+  int temp = 0;
+  for(int i = 1; i <= BoardSize; i++)
+    for(int j = 1; j <= BoardSize; j++)
+      for(int k =  0; k <= BoardSize; k++)
+      {
+        possible[i][j].at(k) = 1;
+      }
+    
+
+
+  for(int i = 1; i <= BoardSize; i++)
+    for(int j = 1; j <= BoardSize; j++)
+      for(int k = 1; k <= BoardSize; k++)
+      {
+        if(rows[i][k] > 0 || columns[j][k] > 0 || squares[squareNumber(i, j)][k] > 0 || original[i][j] != Blank)
         {
-          possible[i][j][k] = 1;
+            possible[i][j].at(k) = 0;
         }
 
-      
+        if(original[i][j] != Blank)
+        {
+          possible[i][j].at(0) = 0; 
+        }
+      }
 
+// cout << "possible" << endl;
 
-  for(int 1 = 1; i <= BoardSize; i++)
-    for(int j = 1; j <= BoardSize; j++)
-    {
+//   for(int i = 1; i <= BoardSize; i++)
+//   { 
+//     cout << "Row " << i << endl; 
+//     for(int j = 1; j <= BoardSize; j++)
+//     {  
+//       cout << "| ";
+//       for(int k = 0; k <= BoardSize; k++)
+//       {
+//         cout << possible[i][j].at(k) << " ";
+//       }
+//       cout << "|" << endl;
+//     }
+//   }
 
-    }
 }
 
-void board::solve(int counter);
+bool board::solve(int index)
 {
+  recurseCount++;
+  if(recurseCount%1000 == 0)
+  {
+    print();
+    cout << endl << recurseCount << endl;
+  }
 
+  double ind = (double) index;
+  int i = ceil(ind/9);
+  int j = index%9;
+  int picker = 1;
+  if(j == 0)
+    j = 9;
+
+  if(conflicts() == false)
+  {
+    return false;
+  }
+  if(isSolved())
+  {
+    return true;
+  }  
+  
+
+
+  if(possible[i][j].at(0) == 0)
+  {
+    if(solve(index++) == false)
+      return false;
+    else
+      return true;
+  }
+
+  else
+  {
+    while(picker < 10)
+    {
+      while(possible[i][j].at(picker) != 1)
+      {
+        picker++;
+      }
+
+      value[i][j] = picker;
+      if(solve(index++) == true)
+      {
+        return true;
+      }
+      else
+      {
+        possible[i][j].at(picker) = 0;
+      }
+    }
+    return false;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // recurseCount++;
+  // conflicts();
+  // if(isSolved())
+  // {
+  //   return true;
+  // }
+  // double ind = (double) index;
+  // int i = ceil(ind/9);
+  // int j = index%9;
+  // if(j == 0)
+  //   j = 9;
+  // int picker = 1;
+  // while()
+  // {
+  //   while(possible[i][j].at(picker) != 1)
+  //   {
+  //     picker++;
+  //     if(picker >= 9)
+  //     {
+  //       picker = -1;
+  //       break;
+  //     }
+  //   }
+  //   if(picker == -1)
+  //     if(solve(index--))
+  //       return true;
+  //     else
+  //       return false;
+  //   else
+  //   {
+  //     value[i][j] = picker;
+  //     if(solve(index--)
+  //       return true;
+  //     else
+  //     {
+  //       possible[i][j].at(picker) = 0;
+  //       picker = 1;
+  //     }
+  //   }
+  // }
+
+  
+  
+
+  
+ // solve(index + 1;)
 }

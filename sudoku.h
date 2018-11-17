@@ -45,13 +45,15 @@ public:
 
   // Part b member functions
   void updatePossible();
-  void solve(int &counter);
+  bool solve(int);
+  bool isFull();
   
 
 private:
   // The following matrices go from 1 to BoardSize in each
   // dimension, i.e., they are each (BoardSize+1) * (BoardSize+1)
-  bool conflictflag;
+  int recurseCount;
+  bool conflictflag; //false for conflicts
   matrix<ValueType> value, original, rows, columns, squares;
   matrix<vector<int>> possible;
 };
