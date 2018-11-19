@@ -26,7 +26,7 @@ int main()
       b1.initialize(fin);
       b1.printOriginal();
       b1.updatePossible();
-      b1.solve(1);
+      b1.solve();
       b1.print();
 
       // b1.addUpdate(3, 3, 3);

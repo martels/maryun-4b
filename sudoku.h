@@ -45,9 +45,8 @@ public:
 
   // Part b member functions
   void updatePossible();
-  bool solve(int);
   bool isFull();
-  
+  void solve();
 
 private:
   // The following matrices go from 1 to BoardSize in each

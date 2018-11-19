@@ -7,16 +7,17 @@ board::board(int sqSize)
     : value(BoardSize + 1, BoardSize + 1),
       original(BoardSize + 1, BoardSize + 1),
       rows(BoardSize + 1, BoardSize + 1), columns(BoardSize + 1, BoardSize + 1),
-      squares(BoardSize + 1, BoardSize + 1), possible(BoardSize + 1, BoardSize + 1), recurseCount(0)
+      squares(BoardSize + 1, BoardSize + 1),
+      possible(BoardSize + 1, BoardSize + 1), recurseCount(0)
 // Board constructor
 {
   clear();
-    conflictflag = true;
-    for(int i = 1; i <= BoardSize; i++)
-      for(int j = 1; j <= BoardSize; j++)
-      {
-        possible[i][j].resize(BoardSize + 1);
-      }
+  conflictflag = true;
+  for (int i = 1; i <= BoardSize; i++)
+    for (int j = 1; j <= BoardSize; j++)
+    {
+      possible[i][j].resize(BoardSize + 1);
+    }
 }
 
 void board::clear()
@@ -66,7 +67,7 @@ ostream &operator<<(ostream &ostr, vector<int> &v)
   for (int i = 0; i < v.size(); i++)
     ostr << v[i] << " ";
   cout << endl;
-    return ostr;
+  return ostr;
 }
 
 ValueType board::getCell(int i, int j)
@@ -122,7 +123,6 @@ void board::print()
 }
 
 //-------------------------Part a-------------------------------//
-
 
 void board::printOriginal()
 // Prints the original board.
@@ -186,82 +186,79 @@ bool board::conflicts()
     for (int j = 1; j <= BoardSize; j++)
     {
 
-        temp = value[i][j];
-        rows[i][temp] = rows[i][temp] + 1;
-        
-        int sqNum = squareNumber(i,j);
-        squares[sqNum][temp] = squares[sqNum][temp] +1;
-        
+      temp = value[i][j];
+      rows[i][temp] = rows[i][temp] + 1;
 
-        temp = value[j][i];
-        columns[i][temp] = columns[i][temp] + 1;
+      int sqNum = squareNumber(i, j);
+      squares[sqNum][temp] = squares[sqNum][temp] + 1;
+
+      temp = value[j][i];
+      columns[i][temp] = columns[i][temp] + 1;
     }
 
-
-    for (int i = 1; i <= BoardSize; i++)
+  for (int i = 1; i <= BoardSize; i++)
     for (int j = 1; j <= BoardSize; j++)
     {
       if (rows[i][j] > 1 || squares[i][j] > 1 || columns[i][j] > 1)
       {
-          
-          this->conflictflag = false;
+
+        this->conflictflag = false;
       }
     }
-    return conflictflag;
+  return conflictflag;
 }
 
 void board::printConflicts()
 // updates conflict matrices, prints the board as it stands and prints the
 // conflicts found
 {
-    conflicts();
-    print();
-    if (!conflictflag)
+  conflicts();
+  print();
+  if (!conflictflag)
   {
-  for (int i = 1; i <= BoardSize; i++)
-    for (int j = 1; j <= BoardSize; j++)
+    for (int i = 1; i <= BoardSize; i++)
+      for (int j = 1; j <= BoardSize; j++)
       {
         if (rows[i][j] >= 2)
         {
-          cout << "Conflict! More than one '" << j << "' in row "
-            << i << endl;
+          cout << "Conflict! More than one '" << j << "' in row " << i << endl;
         }
 
         if (squares[i][j] >= 2)
         {
-          cout << "Conflict! More than one '" << j << "' in square "
-               << i << endl;
+          cout << "Conflict! More than one '" << j << "' in square " << i
+               << endl;
         }
 
         if (columns[i][j] >= 2)
         {
-          cout << "Conflict! More than one '" << j << "' in column "
-               << i << endl;
+          cout << "Conflict! More than one '" << j << "' in column " << i
+               << endl;
         }
       }
   }
-    else
-        cout << "No conflicts\n";
+  else
+    cout << "No conflicts\n";
 }
 
 bool board::isFull()
 {
   bool full = true;
 
-  for(int i = 1; i <= BoardSize; i++)
-    for(int j = 1; j <= BoardSize; j++)
+  for (int i = 1; i <= BoardSize; i++)
+    for (int j = 1; j <= BoardSize; j++)
     {
-      if(value[i][j] == -1)
+      if (value[i][j] == -1)
         full = false;
     }
-    return full;
+  return full;
 }
 
 bool board::isSolved()
 {
   conflicts();
 
-  if(conflictflag == true && isFull() == true)
+  if (conflictflag == true && isFull() == true)
     return true;
   else
     return false;
@@ -283,100 +280,89 @@ void board::addUpdate(int i, int j, int val)
   conflicts();
 }
 
-//------------------------------------Part b----------------------------------------------//
+//------------------------------------Part
+//b----------------------------------------------//
 
 void board::updatePossible()
 {
   conflicts();
   int temp = 0;
-  for(int i = 1; i <= BoardSize; i++)
-    for(int j = 1; j <= BoardSize; j++)
-      for(int k =  0; k <= BoardSize; k++)
+  for (int i = 1; i <= BoardSize; i++)
+    for (int j = 1; j <= BoardSize; j++)
+      for (int k = 0; k <= BoardSize; k++)
       {
         possible[i][j].at(k) = 1;
       }
-    
 
-
-  for(int i = 1; i <= BoardSize; i++)
-    for(int j = 1; j <= BoardSize; j++)
-      for(int k = 1; k <= BoardSize; k++)
+  for (int i = 1; i <= BoardSize; i++)
+    for (int j = 1; j <= BoardSize; j++)
+      for (int k = 1; k <= BoardSize; k++)
       {
-        if(rows[i][k] > 0 || columns[j][k] > 0 || squares[squareNumber(i, j)][k] > 0 || original[i][j] != Blank)
+        if (rows[i][k] > 0 || columns[j][k] > 0 ||
+            squares[squareNumber(i, j)][k] > 0 || original[i][j] != Blank)
         {
-            possible[i][j].at(k) = 0;
+          possible[i][j].at(k) = 0;
         }
 
-        if(original[i][j] != Blank)
+        if (original[i][j] != Blank)
         {
-          possible[i][j].at(0) = 0; 
+          possible[i][j].at(0) = 0;
         }
       }
 
-// cout << "possible" << endl;
+  // cout << "possible" << endl;
 
-//   for(int i = 1; i <= BoardSize; i++)
-//   { 
-//     cout << "Row " << i << endl; 
-//     for(int j = 1; j <= BoardSize; j++)
-//     {  
-//       cout << "| ";
-//       for(int k = 0; k <= BoardSize; k++)
-//       {
-//         cout << possible[i][j].at(k) << " ";
-//       }
-//       cout << "|" << endl;
-//     }
-//   }
-
+  //   for(int i = 1; i <= BoardSize; i++)
+  //   {
+  //     cout << "Row " << i << endl;
+  //     for(int j = 1; j <= BoardSize; j++)
+  //     {
+  //       cout << "| ";
+  //       for(int k = 0; k <= BoardSize; k++)
+  //       {
+  //         cout << possible[i][j].at(k) << " ";
+  //       }
+  //       cout << "|" << endl;
+  //     }
+  //   }
 }
 
-void board::solve(int index)
+void board::solve()
 {
-  recurseCount++:
+  conflicts();
+  updatePossible();
+  recurseCount++;
 
-  if(isSolved())
+  if (isSolved())
   {
     print();
-    return
+    return;
   }
 
   int index = 1;
-  double ind = (double) index;
-  int i = ceil(ind/9);
-  int j = index%9;
-  if(j == 0)
+  double ind = (double)index;
+  int i = ceil(ind / 9);
+  int j = index % 9;
+  if (j == 0)
     j = 9;
 
-  while(value[i][j] != Blank)
+  while (value[i][j] != Blank)
   {
     index++;
-    ind = (double) index;
-    i = ceil(ind/9);
-    j = index%9;
-    if(j == 0)
+    ind = (double)index;
+    i = ceil(ind / 9);
+    j = index % 9;
+    if (j == 0)
       j = 9;
   }
 
-  while(picker < 10)
+  for(int picker = 1; picker < 10; picker++)
+  {
+    if(possible[i][j].at(picker) == 1)
     {
-      while(possible[i][j].at(picker) != 1 && picker < 9)
-      {
-        picker++;
-      }
-
       setCell(i, j, picker);
-      if(solve(index++) == true)
-      {
-        return true;
-      }
-      else
-      {
-        possible[i][j].at(picker) = 0;
-      }
+      solve();
+      setCell(i, j, Blank);
     }
-    return false;
-  
-
-  
+  }
 }
