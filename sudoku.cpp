@@ -331,51 +331,41 @@ void board::updatePossible()
 
 }
 
-bool board::solve(int index)
+void board::solve(int index)
 {
-  recurseCount++;
-  if(recurseCount%1000 == 0)
+  recurseCount++:
+
+  if(isSolved())
   {
     print();
-    cout << endl << recurseCount << endl;
+    return
   }
 
+  int index = 1;
   double ind = (double) index;
   int i = ceil(ind/9);
   int j = index%9;
-  int picker = 1;
   if(j == 0)
     j = 9;
 
-  if(conflicts() == false)
+  while(value[i][j] != Blank)
   {
-    return false;
-  }
-  if(isSolved())
-  {
-    return true;
-  }  
-  
-
-
-  if(possible[i][j].at(0) == 0)
-  {
-    if(solve(index++) == false)
-      return false;
-    else
-      return true;
+    index++;
+    ind = (double) index;
+    i = ceil(ind/9);
+    j = index%9;
+    if(j == 0)
+      j = 9;
   }
 
-  else
-  {
-    while(picker < 10)
+  while(picker < 10)
     {
-      while(possible[i][j].at(picker) != 1)
+      while(possible[i][j].at(picker) != 1 && picker < 9)
       {
         picker++;
       }
 
-      value[i][j] = picker;
+      setCell(i, j, picker);
       if(solve(index++) == true)
       {
         return true;
@@ -386,65 +376,7 @@ bool board::solve(int index)
       }
     }
     return false;
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // recurseCount++;
-  // conflicts();
-  // if(isSolved())
-  // {
-  //   return true;
-  // }
-  // double ind = (double) index;
-  // int i = ceil(ind/9);
-  // int j = index%9;
-  // if(j == 0)
-  //   j = 9;
-  // int picker = 1;
-  // while()
-  // {
-  //   while(possible[i][j].at(picker) != 1)
-  //   {
-  //     picker++;
-  //     if(picker >= 9)
-  //     {
-  //       picker = -1;
-  //       break;
-  //     }
-  //   }
-  //   if(picker == -1)
-  //     if(solve(index--))
-  //       return true;
-  //     else
-  //       return false;
-  //   else
-  //   {
-  //     value[i][j] = picker;
-  //     if(solve(index--)
-  //       return true;
-  //     else
-  //     {
-  //       possible[i][j].at(picker) = 0;
-  //       picker = 1;
-  //     }
-  //   }
-  // }
-
-  
   
 
   
- // solve(index + 1;)
 }
