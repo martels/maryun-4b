@@ -160,10 +160,11 @@ void board::printOriginal()
 void board::setCell(int i, int j, int num)
 // sets the cell at i and j
 {
-  if (num <= BoardSize && num > 0 && original[i][j] == Blank)
+  if (num <= BoardSize && num >= -1 && original[i][j] == Blank)
   {
     value[i][j] = num;
   }
+  updatePossible();
   return;
 }
 
@@ -329,13 +330,13 @@ void board::updatePossible()
 
 void board::solve()
 {
-  conflicts();
-  updatePossible();
   recurseCount++;
 
   if (isSolved())
   {
+    cout << "Solution: " << endl;
     print();
+    cout << endl << endl;
     return;
   }
 
@@ -355,7 +356,8 @@ void board::solve()
     if (j == 0)
       j = 9;
   }
-
+  
+  updatePossible();
   for(int picker = 1; picker < 10; picker++)
   {
     if(possible[i][j].at(picker) == 1)
