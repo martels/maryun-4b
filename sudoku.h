@@ -47,12 +47,15 @@ public:
   void updatePossible();
   bool isFull();
   void solve();
-  int printCount();
+  void printCount();
+  int RCount();
 
 private:
   // The following matrices go from 1 to BoardSize in each
   // dimension, i.e., they are each (BoardSize+1) * (BoardSize+1)
+  
   int recurseCount;
+  int solution;
   bool conflictflag; //false for conflicts
   matrix<ValueType> value, original, rows, columns, squares;
   matrix<vector<int>> possible;

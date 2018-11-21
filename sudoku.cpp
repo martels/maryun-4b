@@ -8,7 +8,7 @@ board::board(int sqSize)
       original(BoardSize + 1, BoardSize + 1),
       rows(BoardSize + 1, BoardSize + 1), columns(BoardSize + 1, BoardSize + 1),
       squares(BoardSize + 1, BoardSize + 1),
-      possible(BoardSize + 1, BoardSize + 1), recurseCount(0)
+      possible(BoardSize + 1, BoardSize + 1), recurseCount(0), solution(0)
 // Board constructor
 {
   clear();
@@ -337,6 +337,7 @@ void board::solve()
     cout << "Solution: " << endl;
     print();
     printCount();
+    solution = recurseCount;
     cout << endl << endl;
     return;
   }
@@ -370,8 +371,14 @@ void board::solve()
   }
 }
 
-int board::printCount()
+void board::printCount()
 {
   cout << "The number of recursive calls was " << recurseCount << endl;
-  return recurseCount;
+  return;
+}
+
+int board::RCount()
+{
+  return solution;
+  //return recurseCount;
 }

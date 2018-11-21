@@ -1,5 +1,6 @@
 #include "sudoku.h"
 #include <iostream>
+#include <numeric>
 
 using namespace std;
 
@@ -9,7 +10,7 @@ int main()
   ifstream fin;
 
   // Read the sample grid from the file.
-  string fileName = "sudoku1-3.txt";
+  string fileName = "sudoku4-6.txt";
 
   fin.open(fileName.c_str());
   if (!fin)
@@ -20,40 +21,38 @@ int main()
 
   try
   {
-    board b1(SquareSize);
-    board b2(SquareSize);
-    board b3(SquareSize);
-
-    int b1count = 0;
-    int b2count = 0;
-    int b3count = 0;
+    vector<board*> boards;
+    vector<int> counts;
+    int index = 0;
     double avg = 0;
+    int size = 1;
+    boards.resize(size);
+    counts.resize(size);
 
     while (fin && fin.peek() != 'Z')
     {
-      b1.initialize(fin);
-      b1.printOriginal();
+      while (fin && fin.peek() != 'Z')
+      {
+        boards.at(index) = new board(SquareSize);
+        counts.at(index) = 0;
 
-      b2.initialize(fin);
-      b2.printOriginal();
+        boards.at(index)->initialize(fin);
+        boards.at(index)->printOriginal();
+        boards.at(index)->updatePossible();
+        boards.at(index)->solve();
+        counts.at(index) = boards.at(index)->RCount();
+        counts.at(index) = boards.at(index)->RCount();
 
-      b3.initialize(fin);
-      b3.printOriginal();
+        size++;
+        index++;
 
-      b1.updatePossible();
-      b1.solve();
-      b1count = b1.printCount();
-
-      b2.updatePossible();
-      b2.solve();
-      b2count = b1.printCount();
-
-      b3.updatePossible();
-      b3.solve();
-      b3count = b3.printCount();
-
-      avg = (b3count + b2count + b1count) / 2;
+        boards.resize(size);
+        counts.resize(size);
+      }
     }
+
+    float c_average = accumulate( counts.begin(), counts.end(), 0.0/ counts.size())/counts.size();
+    cout << "The average recursive calls of all " << index << " was " << c_average << endl;
     exit(1);
   }
   catch (indexRangeError &ex)
