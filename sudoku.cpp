@@ -336,6 +336,7 @@ void board::solve()
   {
     cout << "Solution: " << endl;
     print();
+    printCount();
     cout << endl << endl;
     return;
   }
@@ -367,4 +368,10 @@ void board::solve()
       setCell(i, j, Blank);
     }
   }
+}
+
+int board::printCount()
+{
+  cout << "The number of recursive calls was " << recurseCount << endl;
+  return recurseCount;
 }

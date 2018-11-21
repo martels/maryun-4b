@@ -47,6 +47,7 @@ public:
   void updatePossible();
   bool isFull();
   void solve();
+  int printCount();
 
 private:
   // The following matrices go from 1 to BoardSize in each
