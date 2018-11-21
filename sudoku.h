@@ -20,7 +20,7 @@ const int BoardSize = SquareSize * SquareSize;
 const int MinValue = 1;
 const int MaxValue = 9;
 
-//int numSolutions = 0;
+// int numSolutions = 0;
 
 class board
 // Stores the entire Sudoku board
@@ -53,10 +53,10 @@ public:
 private:
   // The following matrices go from 1 to BoardSize in each
   // dimension, i.e., they are each (BoardSize+1) * (BoardSize+1)
-  
+
   int recurseCount;
   int solution;
-  bool conflictflag; //false for conflicts
+  bool conflictflag; // false for conflicts
   matrix<ValueType> value, original, rows, columns, squares;
   matrix<vector<int>> possible;
 };

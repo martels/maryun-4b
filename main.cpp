@@ -4,7 +4,6 @@
 
 using namespace std;
 
-
 int main()
 {
   ifstream fin;
@@ -21,7 +20,7 @@ int main()
 
   try
   {
-    vector<board*> boards;
+    vector<board *> boards;
     vector<int> counts;
     int index = 0;
     double avg = 0;
@@ -51,8 +50,11 @@ int main()
       }
     }
 
-    float c_average = accumulate( counts.begin(), counts.end(), 0.0/ counts.size())/counts.size();
-    cout << "The average recursive calls of all " << index << " was " << c_average << endl;
+    float c_average =
+        accumulate(counts.begin(), counts.end(), 0.0 / counts.size()) /
+        counts.size();
+    cout << "The average recursive calls of all " << index << " was "
+         << c_average << endl;
     exit(1);
   }
   catch (indexRangeError &ex)

@@ -282,7 +282,7 @@ void board::addUpdate(int i, int j, int val)
 }
 
 //------------------------------------Part
-//b----------------------------------------------//
+// b----------------------------------------------//
 
 void board::updatePossible()
 {
@@ -358,11 +358,11 @@ void board::solve()
     if (j == 0)
       j = 9;
   }
-  
+
   updatePossible();
-  for(int picker = 1; picker < 10; picker++)
+  for (int picker = 1; picker < 10; picker++)
   {
-    if(possible[i][j].at(picker) == 1)
+    if (possible[i][j].at(picker) == 1)
     {
       setCell(i, j, picker);
       solve();
@@ -380,5 +380,5 @@ void board::printCount()
 int board::RCount()
 {
   return solution;
-  //return recurseCount;
+  // return recurseCount;
 }
